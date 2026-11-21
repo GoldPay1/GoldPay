@@ -22,13 +22,84 @@
         
         .hidden { display: none; }
 
-        /* CUSTOM PROFESSIONAL POP-UP STYLE */
-        .popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 9999; }
-        .popup-box { background: #111a2e; border: 1px solid #1e293b; padding: 25px; border-radius: 15px; width: 85%; max-width: 320px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .popup-icon { font-size: 45px; margin-bottom: 10px; display: block; }
-        .popup-title { font-size: 20px; font-weight: bold; color: #fff; margin-bottom: 8px; }
-        .popup-text { font-size: 14px; color: #8a99a8; margin-bottom: 20px; }
-        .popup-btn { background: #00e5ff; color: #0b151e; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; }
+        /* PREMIUM GLASSMORPHIC POP-UP STYLE */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 11, 20, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+        .popup-box {
+            background: linear-gradient(145deg, rgba(22, 34, 56, 0.96), rgba(11, 21, 35, 0.98));
+            border: 1px solid rgba(0, 229, 255, 0.35);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 25px rgba(0, 229, 255, 0.15);
+            padding: 32px 24px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 330px;
+            text-align: center;
+            animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .popup-icon-circle {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+        .popup-icon-circle.success {
+            background: rgba(0, 255, 170, 0.1);
+            border: 2px solid rgba(0, 255, 170, 0.45);
+            box-shadow: 0 0 25px rgba(0, 255, 170, 0.25);
+        }
+        .popup-icon-circle.error {
+            background: rgba(255, 77, 77, 0.12);
+            border: 2px solid rgba(255, 77, 77, 0.45);
+            box-shadow: 0 0 25px rgba(255, 77, 77, 0.25);
+        }
+        .popup-title {
+            font-size: 23px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .popup-text {
+            font-size: 14px;
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-bottom: 26px;
+        }
+        .popup-btn {
+            background: linear-gradient(90deg, #00e5ff, #00b4d8);
+            color: #050b14;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: 0.8px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 229, 255, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .popup-btn:active {
+            transform: scale(0.97);
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.85) translateY(15px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -78,10 +149,12 @@
         </div>
     </div>
 
-    <!-- CUSTOM PROFESSIONAL POP-UP HTML -->
+    <!-- PREMIUM POP-UP HTML -->
     <div id="custom-popup" class="popup-overlay">
-        <div class="popup-box">
-            <span id="p-icon" class="popup-icon">✔️</span>
+        <div class="popup-box" id="popup-card">
+            <div id="p-icon-circle" class="popup-icon-circle success">
+                <!-- SVG icon dynamically injected by JS -->
+            </div>
             <div id="p-title" class="popup-title">Success!</div>
             <div id="p-text" class="popup-text">Account Created Successfully!</div>
             <button class="popup-btn" onclick="closePopup()">OK</button>
@@ -91,19 +164,35 @@
     <script>
         var nextStep = null;
 
-        // कस्टम पॉप-अप ट्रिगर करने का फ़ंक्शन
+        function goToDashboard() {
+            window.location.href = "dashboard.html";
+        }
+
+        // Premium Pop-up Trigger Function
         function showPopup(title, text, icon, type, callback) {
             document.getElementById('p-title').innerText = title;
             document.getElementById('p-text').innerText = text;
-            document.getElementById('p-icon').innerText = icon;
             
+            var iconCircle = document.getElementById('p-icon-circle');
+            var card = document.getElementById('popup-card');
             var btn = document.querySelector('.popup-btn');
-            if(type === 'error') {
-                btn.style.background = '#ff4d4d';
-                btn.style.color = '#fff';
+
+            if (type === 'error') {
+                iconCircle.className = 'popup-icon-circle error';
+                iconCircle.innerHTML = '<svg viewBox="0 0 24 24" width="36" height="36" style="filter: drop-shadow(0 0 6px rgba(255,77,77,0.6));"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="#ff4d4d" stroke-width="3" stroke-linecap="round"/></svg>';
+                card.style.borderColor = 'rgba(255, 77, 77, 0.35)';
+                card.style.boxShadow = '0 20px 50px rgba(0, 0, 0, 0.75), 0 0 25px rgba(255, 77, 77, 0.15)';
+                btn.style.background = 'linear-gradient(90deg, #ff4d4d, #ff1a1a)';
+                btn.style.boxShadow = '0 6px 20px rgba(255, 77, 77, 0.35)';
+                btn.style.color = '#ffffff';
             } else {
-                btn.style.background = '#00e5ff';
-                btn.style.color = '#0b151e';
+                iconCircle.className = 'popup-icon-circle success';
+                iconCircle.innerHTML = '<svg viewBox="0 0 24 24" width="36" height="36" style="filter: drop-shadow(0 0 6px rgba(0,255,170,0.6));"><path d="M5 13l4 4L19 7" fill="none" stroke="#00ffaa" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+                card.style.borderColor = 'rgba(0, 229, 255, 0.35)';
+                card.style.boxShadow = '0 20px 50px rgba(0, 0, 0, 0.75), 0 0 25px rgba(0, 229, 255, 0.15)';
+                btn.style.background = 'linear-gradient(90deg, #00e5ff, #00b4d8)';
+                btn.style.boxShadow = '0 6px 20px rgba(0, 229, 255, 0.35)';
+                btn.style.color = '#050b14';
             }
             
             document.getElementById('custom-popup').style.display = 'flex';
@@ -112,7 +201,7 @@
 
         function closePopup() {
             document.getElementById('custom-popup').style.display = 'none';
-            if(nextStep) {
+            if (nextStep) {
                 nextStep();
                 nextStep = null;
             }
@@ -164,54 +253,14 @@
                 showPopup('Error!', 'Please Fill Phone And Password!', '❌', 'error', null);
                 return;
             }
-
             if (phone === savedPhone && pass === savedPass) {
-                showPopup('Welcome!', 'Login Successful!', '✔️', 'success', function() {
+                showPopup('Success!', 'Login Successful!', '✔️', 'success', function() {
                     goToDashboard();
                 });
             } else {
-                showPopup('Error!', 'Check Password otherwise Phone No!', '❌', 'error', null);
+                showPopup('Error!', 'Invalid Phone Number or Password!', '❌', 'error', null);
             }
         }
-
-        // Dashboard Redirector
-        function goToDashboard() {
-            window.location.href = "dashboard.html";
-        }
-    </script>
-        <!-- Aapki website ka baaki saara design aur content yahan upar rahega -->
-
-    <!-- 👇 Yahan par Firebase ka script shuru hota hai -->
-    <script type="module">
-      import { initializeApp } from "https://gstatic.com";
-      import { getFirestore, doc, getDoc } from "https://gstatic.com";
-
-      // 📋 Jo code aapne Firebase Console se copy kiya hai, use yahan paste karein:
-       const firebaseConfig = {
-  apiKey: "AIzaSyBU4_oQ-92QcHEF0mfZv75vRa3lM0Hqq6k",
-  authDomain: "dhanpay-b2dbb.firebaseapp.com",
-  projectId: "dhanpay-b2dbb",
-  storageBucket: "dhanpay-b2dbb.firebasestorage.app",
-  messagingSenderId: "126383957454",
-  appId: "1:126383957454:web:28f921cd784299473eb79f",
-  measurementId: "G-1ETRXD4PHF"
-};
-
-      // Firebase connect karne ke liye
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
-
-      // User ka data/balance check karne ke liye function
-      async function checkBalance(userId) {
-        const userRef = doc(db, "users", userId);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-            alert("Aapka Balance: ₹" + userSnap.data().balance);
-        } else {
-            alert("User nahi mila!");
-        }
-      }
-      window.checkBalance = checkBalance;
     </script>
 </body>
 </html>
